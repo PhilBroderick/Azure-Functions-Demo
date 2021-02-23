@@ -13,19 +13,20 @@ namespace azure_functions_demo
     public static class HttpTrigger
     {
         [FunctionName("HttpFunction")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequest req,
+        public static string Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequest req, 
+            [Queue("my-queue")] ICollector<string> queueMessage,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             var name = req.Query["name"];
 
-            var responseMessage = string.IsNullOrEmpty(name)
+            queueMessage.Add(string.IsNullOrEmpty(name)
                 ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+                : $"Hello, {name}. This HTTP triggered function executed successfully.");
 
-            return new OkObjectResult(responseMessage);
+            return "Message has been processed!";
         }
     }
 }

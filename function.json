@@ -1,0 +1,9 @@
+{
+    "bindings": [
+        {
+            "type": "queue",
+            "direction": "out",
+            "name": "queueMessage"
+        }
+    ]
+}
